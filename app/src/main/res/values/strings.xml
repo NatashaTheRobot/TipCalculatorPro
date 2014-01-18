@@ -3,6 +3,6 @@
 
     <string name="app_name">TipCalculatorPro</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string><string name="titleTotalAmount">Total Amount</string>
+    <string name="action_settings">Settings</string><string name="titleTotalAmount">Total Amount</string><string name="titleTipPercentage">Tip Percentage</string><string name="tipPercentage10">10%</string><string name="tipPercentage15">15%</string><string name="tipPercentage20">20%</string><string name="tipPercentageOther">Other</string>
 
 </resources>
