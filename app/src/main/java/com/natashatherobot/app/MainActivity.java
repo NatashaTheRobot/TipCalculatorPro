@@ -1,65 +1,102 @@
 package com.natashatherobot.app;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+import java.text.NumberFormat;
+
+public class MainActivity extends Activity {
+    EditText etInitialAmount;
+    TextView tvTipAmountValue;
+    TextView tvTotalPaymentValue;
+    EditText etTipPercentageOther;
+    RadioGroup rgTipPercentage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        etInitialAmount = (EditText) findViewById(R.id.etInitialAmount);
+        tvTipAmountValue = (TextView) findViewById(R.id.tvTipAmountValue);
+        tvTotalPaymentValue = (TextView) findViewById(R.id.tvTotalPaymentValue);
+        etTipPercentageOther = (EditText) findViewById(R.id.etTipPercentageOther);
+        rgTipPercentage = (RadioGroup) findViewById(R.id.rgTipPercentage);
+
+        setupEditTextInitialAmountListener();
     }
 
+    public void setupEditTextInitialAmountListener() {
+       etInitialAmount.addTextChangedListener(new TextWatcher() {
+           @Override
+           public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+           @Override
+           public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+           @Override
+           public void afterTextChanged(Editable s) {
+               tvTipAmountValue.setText(tipDollarAmount());
+               tvTotalPaymentValue.setText(totalDollarAmount());
+           }
+       });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    // Private Calculations
+
+    private String tipDollarAmount() {
+        return NumberFormat.getCurrencyInstance().format(tipAmount());
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    private String totalDollarAmount() {
+        Float totalPay = 0.0f;
 
-        public PlaceholderFragment() {
+        String initialAmountString = etInitialAmount.getText().toString();
+        if (initialAmountString.length() > 0) {
+            Float initialAmount = Float.parseFloat(etInitialAmount.getText().toString());
+            totalPay = initialAmount + tipAmount();
         }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+        return NumberFormat.getCurrencyInstance().format(totalPay);
+    }
+
+    private Float tipAmount() {
+        Float tipAmount = 0.0f;
+
+        String initialAmountString = etInitialAmount.getText().toString();
+        if (initialAmountString.length() > 0) {
+            Float initialAmount = Float.parseFloat(initialAmountString);
+
+            int checkedRadioButtonId = rgTipPercentage.getCheckedRadioButtonId();
+            RadioButton checkedRadioButton = (RadioButton) rgTipPercentage.findViewById(checkedRadioButtonId);
+            int checkedRadioButtonPercentage = Integer.parseInt(checkedRadioButton.getTag().toString());
+
+            if (checkedRadioButtonPercentage == 100) {
+                Float otherTipPercentage = 0.0f;
+                String otherTipPercentageString = etTipPercentageOther.getText().toString();
+                if (otherTipPercentageString.length() > 0) {
+                    otherTipPercentage = Float.parseFloat(otherTipPercentageString);
+                }
+                tipAmount = initialAmount * otherTipPercentage / 100;
+            } else {
+                tipAmount = initialAmount * checkedRadioButtonPercentage / 100;
+            }
         }
+
+        return tipAmount;
     }
 
 }

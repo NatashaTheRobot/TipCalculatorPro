@@ -46,9 +46,10 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/etTotalAmount"
+                    android:hint="0.00"
+                    android:id="@+id/etInitialAmount"
                     android:layout_below="@+id/tvTitleTotalAmount"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"/>
 
             </RelativeLayout>
@@ -56,6 +57,7 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/rlTipPercentage"
                 android:layout_below="@+id/rlTotalAmount"
                 style="?android:listSeparatorTextViewStyle">
 
@@ -75,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvTitleTipPercentage"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:id="@+id/rgTipPercentage">
 
@@ -126,7 +128,59 @@
 
             </RelativeLayout>
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlTipPercentage"
+                style="?android:listSeparatorTextViewStyle">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/tipAmount"
+                    android:id="@+id/tvTipAmountLabel"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/initialAmount"
+                    android:id="@+id/tvTipAmountValue"
+                    android:layout_toRightOf="@+id/tvTipAmountLabel"
+                    android:layout_alignBaseline="@+id/tvTipAmountLabel"
+                    android:layout_marginLeft="20dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/totalPayment"
+                    android:id="@+id/tvTotalPayment"
+                    android:layout_below="@+id/tvTipAmountLabel"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/initialAmount"
+                    android:id="@+id/tvTotalPaymentValue"
+                    android:layout_toRightOf="@+id/tvTotalPayment"
+                    android:layout_alignBaseline="@+id/tvTotalPayment"
+                    android:layout_marginLeft="20dp"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
