@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import java.text.NumberFormat;
 
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
         rgTipPercentage = (RadioGroup) findViewById(R.id.rgTipPercentage);
 
         setupEditTextInitialAmountListener();
+        setupRadioGroupListener();
     }
 
     public void setupEditTextInitialAmountListener() {
@@ -53,6 +55,18 @@ public class MainActivity extends Activity {
                tvTotalPaymentValue.setText(totalDollarAmount());
            }
        });
+    }
+
+    public void setupRadioGroupListener() {
+        rgTipPercentage.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // if other checked, enable other edit text field, otherwise disable it
+
+                tvTipAmountValue.setText(tipDollarAmount());
+                tvTotalPaymentValue.setText(totalDollarAmount());
+            }
+        });
     }
 
     // Private Calculations
