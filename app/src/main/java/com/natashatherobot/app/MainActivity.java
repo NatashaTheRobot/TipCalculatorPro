@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 public class MainActivity extends Activity {
@@ -70,17 +71,17 @@ public class MainActivity extends Activity {
 
     // Private Calculations
 
-    private String formattedStringFromAmount(Double amount) {
+    private String formattedStringFromAmount(BigDecimal amount) {
         return NumberFormat.getCurrencyInstance().format(amount);
     }
 
-    private Double tipAmount() {
-        Double initialAmount = doubleFromEditText(etInitialAmount);
+    private BigDecimal tipAmount() {
+        BigDecimal initialAmount = decimalFromEditText(etInitialAmount);
 
         Integer tagForCheckedRadioButton = tagForCheckedRadioButton();
-        Double tipPercentage = tagForCheckedRadioButton == tagForRadioButtonOther ? doubleFromEditText(etTipPercentageOther) : tagForCheckedRadioButton;
+        BigDecimal tipPercentage = tagForCheckedRadioButton == tagForRadioButtonOther ? decimalFromEditText(etTipPercentageOther) : (new BigDecimal(tagForCheckedRadioButton));
 
-        return initialAmount * tipPercentage / 100;
+        return initialAmount.multiply(tipPercentage).divide(new BigDecimal(100));
     }
 
     private Integer tagForView(View view) {
@@ -93,11 +94,11 @@ public class MainActivity extends Activity {
         return tagForView(checkedRadioButton);
     }
 
-    private Double doubleFromEditText(EditText editText) {
-        Double amount = 0.0;
+    private BigDecimal decimalFromEditText(EditText editText) {
+        BigDecimal amount = new BigDecimal(0.0);
         String amountString = editText.getText().toString();
         if (amountString.length() > 0) {
-            amount = Double.parseDouble(amountString);
+            amount = new BigDecimal(amountString);
         }
         return amount;
     }
@@ -106,10 +107,10 @@ public class MainActivity extends Activity {
         TextView tvTipAmountValue = (TextView) findViewById(R.id.tvTipAmountValue);
         TextView tvTotalPaymentValue = (TextView) findViewById(R.id.tvTotalPaymentValue);
 
-        Double tipAmount = tipAmount();
+        BigDecimal tipAmount = tipAmount();
         tvTipAmountValue.setText(formattedStringFromAmount(tipAmount));
 
-        Double totalPayment = doubleFromEditText(etInitialAmount) + tipAmount;
+        BigDecimal totalPayment = decimalFromEditText(etInitialAmount).add(tipAmount);
         tvTotalPaymentValue.setText(formattedStringFromAmount(totalPayment));
     }
 
