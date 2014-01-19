@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
         rgTipPercentage = (RadioGroup) findViewById(R.id.rgTipPercentage);
 
         setupEditTextInitialAmountListener();
+        setupEditTextOtherAmountListener();
         setupRadioGroupListener();
     }
 
@@ -57,11 +58,34 @@ public class MainActivity extends Activity {
        });
     }
 
+    public void setupEditTextOtherAmountListener() {
+        etTipPercentageOther.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvTipAmountValue.setText(tipDollarAmount());
+                tvTotalPaymentValue.setText(totalDollarAmount());
+            }
+        });
+    }
+
     public void setupRadioGroupListener() {
         rgTipPercentage.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // if other checked, enable other edit text field, otherwise disable it
+
+                RadioButton checkedRadioButton = (RadioButton) rgTipPercentage.findViewById(checkedId);
+                if (checkedRadioButton.getTag().toString().equals("100")) {
+                    etTipPercentageOther.setEnabled(true);
+                    etTipPercentageOther.requestFocus();
+                } else {
+                    etTipPercentageOther.setEnabled(false);
+                }
 
                 tvTipAmountValue.setText(tipDollarAmount());
                 tvTotalPaymentValue.setText(totalDollarAmount());
@@ -76,33 +100,33 @@ public class MainActivity extends Activity {
     }
 
     private String totalDollarAmount() {
-        Float totalPay = 0.0f;
+        Double totalPay = 0.0;
 
         String initialAmountString = etInitialAmount.getText().toString();
         if (initialAmountString.length() > 0) {
-            Float initialAmount = Float.parseFloat(etInitialAmount.getText().toString());
+            Double initialAmount = Double.parseDouble(etInitialAmount.getText().toString());
             totalPay = initialAmount + tipAmount();
         }
 
         return NumberFormat.getCurrencyInstance().format(totalPay);
     }
 
-    private Float tipAmount() {
-        Float tipAmount = 0.0f;
+    private Double tipAmount() {
+        Double tipAmount = 0.0;
 
         String initialAmountString = etInitialAmount.getText().toString();
         if (initialAmountString.length() > 0) {
-            Float initialAmount = Float.parseFloat(initialAmountString);
+            Double initialAmount = Double.parseDouble(initialAmountString);
 
             int checkedRadioButtonId = rgTipPercentage.getCheckedRadioButtonId();
             RadioButton checkedRadioButton = (RadioButton) rgTipPercentage.findViewById(checkedRadioButtonId);
             int checkedRadioButtonPercentage = Integer.parseInt(checkedRadioButton.getTag().toString());
 
             if (checkedRadioButtonPercentage == 100) {
-                Float otherTipPercentage = 0.0f;
+                Double otherTipPercentage = 0.0;
                 String otherTipPercentageString = etTipPercentageOther.getText().toString();
                 if (otherTipPercentageString.length() > 0) {
-                    otherTipPercentage = Float.parseFloat(otherTipPercentageString);
+                    otherTipPercentage = Double.parseDouble(otherTipPercentageString);
                 }
                 tipAmount = initialAmount * otherTipPercentage / 100;
             } else {
